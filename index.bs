@@ -1,0 +1,86 @@
+<pre class='metadata'>
+Title: Minimum Common Web Platform API
+Shortname: common-web-platform-api
+Status: w3c/UD
+URL: https://owpacg.github.io/common
+Repository: https://github.com/owpacg/common
+Editor: James M Snell, Cloudflare https://cloudflare.com/, jsnell@cloudflare.com
+Abstract: Minimum Common Web Platform API for Non-Browser EcmaScript-based runtimes.
+Markup Shorthands: markdown yes
+</pre>
+<pre class=link-defaults>
+spec:url; type:interface; text:URL
+spec:html; type:attribute; for:WorkerGlobalScope; text:navigator
+</pre>
+
+Introduction {#intro}
+=====================
+
+*This section is non-normative.*
+
+TBD
+
+Use Cases {#use-cases}
+======================
+
+*This section is non-normative.*
+
+TBD
+
+Terminology {#terminology}
+==========================
+
+TBD
+
+Common API Index {#index}
+=========================
+
+All runtime environments purporting to conform to this specification SHALL fully implement each of
+the following Web Platform APIs in accordance to their normative standard definitions as
+referenced. Where any conforming runtime environment chooses (either by necessity or otherwise) to
+diverge from a normative requirement of the specification, clear explanations of such divergence
+MUST be made readily available in documentation.
+
+Interfaces:
+
+* {{AbortController}}
+* {{AbortSignal}}
+* {{ByteLengthQueuingStrategy}}
+* <code class="idl"><a data-link-type="idl" href="https://wicg.github.io/compression/#compression-stream">CompressionStream</a></code>
+* {{CountQueuingStrategy}}
+* {{Crypto}}
+* {{CryptoKey}}
+* <code class="idl"><a data-link-type="idl" href="https://wicg.github.io/compression/#decompression-stream">DecompressionStream</a></code>
+* {{DOMException}}
+* {{Event}}
+* {{EventTarget}}
+* {{ReadableByteStreamController}}
+* {{ReadableStream}}
+* {{ReadableStreamBYOBReader}}
+* {{ReadableStreamBYOBRequest}}
+* {{ReadableStreamDefaultController}}
+* {{ReadableStreamDefaultReader}}
+* {{SubtleCrypto}}
+* {{TextDecoder}}
+* {{TextDecoderStream}}
+* {{TextEncoder}}
+* {{TextEncoderStream}}
+* {{TransformStream}}
+* {{TransformStreamDefaultController}}
+* {{URL}}
+* <code class="idl"><a data-link-type="idl" href="https://wicg.github.io/urlpattern/#urlpattern-class">URLPattern</a></code>
+* {{URLSearchParams}}
+* {{WritableStream}}
+* {{WritableStreamDefaultController}}
+
+Global methods / properties:
+
+* <code class="idl"><a data-link-type="idl" href="https://tc39.es/ecma262/multipage/global-object.html#sec-globalthis">globalThis</a></code>
+* globalThis.{{atob()}}
+* globalThis.{{btoa()}}
+* globalThis.{{console}}
+* globalThis.{{navigator}}.{{userAgent}}
+* globalThis.{{queueMicrotask()}}
+* globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
+* globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
+* globalThis.{{structuredClone()}}
