@@ -100,6 +100,8 @@ Open Questions {#open-questions}
 
 *Remove this section before publishing.*
 
-* Should `window` also be included here as an alias for `globalThis`?
-* Should `globalThis` be required to extend from `EventTarget`?
-* Many of the globals defined as Web Platform APIs are marked as `readonly` on the global scope. This, however, causes a number of backwards compatibility issues in many runtimes whenever a new global is added (this has been a challenge in Node.js and Cloudflare Workers, for instance). We likely need to allow for standard globals to be implemented without the `readonly` attribute enforced.
+Issue: Should `window` also be included here as an alias for `globalThis`?
+
+Issue: Should `globalThis` be required to extend from `EventTarget`?
+
+Issue: Many of the globals defined as Web Platform APIs are marked as `readonly` on the global scope. This, however, causes a number of backwards compatibility issues in many runtimes whenever a new global is added (this has been a challenge in Node.js and Cloudflare Workers, for instance). We likely need to allow for standard globals to be implemented without the `readonly` attribute enforced.
