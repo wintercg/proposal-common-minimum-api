@@ -10,7 +10,8 @@ Markup Shorthands: markdown yes
 </pre>
 <pre class=link-defaults>
 spec:url; type:interface; text:URL
-spec:html; type:attribute; for:WorkerGlobalScope; text:navigator
+spec:html; type:attribute; for:Window; text:navigator
+spec:html; type:attribute; for:Window; text:self
 </pre>
 
 Introduction {#intro}
@@ -18,28 +19,21 @@ Introduction {#intro}
 
 *This section is non-normative.*
 
-TBD
-
-Use Cases {#use-cases}
-======================
-
-*This section is non-normative.*
-
-TBD
+The Minimum Common Web Platform API is a curated subset of standardized Web Platform APIs intended to define a minimum set of capabilities common to Browser and Non-Browser JavaScript-based runtime environments.
 
 Terminology {#terminology}
 ==========================
 
-TBD
+The Web Platform is the combination of technology standards defined by organizations such as the W3C, the WHATWG, and others as implemented by Web Browsers.
+
+A Web Platform API is a ... TBD.
+
+A <dfn>Web-interoperable Runtime</dfn> is any EcmaScript-based application runtime environment that implements the subset of Web Platform APIs outlined in this specification. This term is intentionally broad to also encompass Web Browsers.
 
 Common API Index {#index}
 =========================
 
-All runtime environments purporting to conform to this specification SHALL fully implement each of
-the following Web Platform APIs in accordance to their normative standard definitions as
-referenced. Where any conforming runtime environment chooses (either by necessity or otherwise) to
-diverge from a normative requirement of the specification, clear explanations of such divergence
-MUST be made readily available in documentation.
+All <a>Web-interoperable Runtimes</a> conforming to this specification SHALL fully implement each of the following Web Platform APIs in accordance to their normative standard requirements except where modified here. Where any conforming runtime environment chooses (either by necessity or otherwise) to diverge from a normative requirement of the specification, clear explanations of such divergence MUST be made clearly and readily available in documentation.
 
 Interfaces:
 
@@ -76,11 +70,38 @@ Interfaces:
 Global methods / properties:
 
 * <code class="idl"><a data-link-type="idl" href="https://tc39.es/ecma262/multipage/global-object.html#sec-globalthis">globalThis</a></code>
+* globalThis.{{self}}
 * globalThis.{{atob()}}
 * globalThis.{{btoa()}}
 * globalThis.{{console}}
+* globalThis.{{crypto}}
 * globalThis.{{navigator}}.{{userAgent}}
 * globalThis.{{queueMicrotask()}}
 * globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
 * globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
 * globalThis.{{structuredClone()}}
+
+The Global Scope {#global-scope}
+================================
+
+The exact type of the `globalScope` can vary across runtimes. Most Web Platform APIs are defined in terms that assume Web Browser environments that specifically expose types like {{Window}}, {{Worker}}, {{WorkerGlobalScope}}, and so forth. To simplify conformance, all Interfaces, methods, and properties defined by this specification MUST be exposed on the runtime's relevant global scope (e,g., `globalThis.crypto`, `globalThis.ReadableStream`, etc).
+
+Likewise, with many runtimes, adding a new global-scoped property can introduce breaking changes when the new global conflicts with existing application code. Many Web Platform APIs defined global properties using the `readonly` attribute. To avoid introducing breaking changes, runtimes conforming to this specification MAY choose to ignore the `readonly` attribute for properties being added to the global scope.
+
+Extensions {#extensions}
+========================
+
+Runtime-specific extensions to any Web Platform API MAY be implemented by conforming runtimes. Such extensions must be defined so that their use neither contradicts nor causes the non-conformance of normative functionality of any Web Platform API.
+
+Application use of such extensions must be carefully considered, as doing so reduces interoperability and portability of code across runtimes.
+
+Open Questions {#open-questions}
+================================
+
+*Remove this section before publishing.*
+
+Issue: Should `window` also be included here as an alias for `globalThis`?
+
+Issue: Should `globalThis` be required to extend from `EventTarget`?
+
+Issue: Many of the globals defined as Web Platform APIs are marked as `readonly` on the global scope. This, however, causes a number of backwards compatibility issues in many runtimes whenever a new global is added (this has been a challenge in Node.js and Cloudflare Workers, for instance). We likely need to allow for standard globals to be implemented without the `readonly` attribute enforced.
