@@ -1,0 +1,25 @@
+name: Deploy
+on: [push]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Build spec
+        run: |
+          mkdir -p out
+          curl --retry 2 https://api.csswg.org/bikeshed/ --output out/index.html --header "Accept: text/plain, text/html" -F die-on=fatal -F file=@"index.bs"
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "proposal-common-min-api"
+          entrypoint: "https://deno.land/std@0.134.0/http/file_server.ts"
+          root: out/
