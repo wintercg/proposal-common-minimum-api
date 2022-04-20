@@ -2,8 +2,8 @@
 Title: Minimum Common Web Platform API
 Shortname: common-web-platform-api
 Status: w3c/UD
-URL: https://owpacg.github.io/common
-Repository: https://github.com/owpacg/common
+URL: https://proposal-common-min-api.deno.dev/
+Repository: https://github.com/wintercg/proposal-common-minimum-api
 Editor: James M Snell, Cloudflare https://cloudflare.com/, jsnell@cloudflare.com
 Abstract: Minimum Common Web Platform API for Non-Browser EcmaScript-based runtimes.
 Markup Shorthands: markdown yes
