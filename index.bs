@@ -1,7 +1,8 @@
 <pre class='metadata'>
 Title: Minimum Common Web Platform API
 Shortname: common-web-platform-api
-Status: w3c/UD
+Status: w3c/CG-DRAFT
+Level: none
 URL: https://proposal-common-min-api.deno.dev/
 Repository: https://github.com/wintercg/proposal-common-minimum-api
 Editor: James M Snell, Cloudflare https://cloudflare.com/, jsnell@cloudflare.com
