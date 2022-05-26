@@ -1,7 +1,8 @@
 <pre class='metadata'>
 Title: Minimum Common Web Platform API
 Shortname: common-web-platform-api
-Status: w3c/CG-DRAFT
+Group: wintercg
+Status: CG-DRAFT
 Level: none
 URL: https://common-min-api.proposal.wintercg.org/
 Repository: https://github.com/wintercg/proposal-common-minimum-api
