@@ -41,6 +41,7 @@ Interfaces:
 
 * {{AbortController}}
 * {{AbortSignal}}
+* {{Blob}}
 * {{ByteLengthQueuingStrategy}}
 * <code class="idl"><a data-link-type="idl" href="https://wicg.github.io/compression/#compression-stream">CompressionStream</a></code>
 * {{CountQueuingStrategy}}
@@ -50,6 +51,7 @@ Interfaces:
 * {{DOMException}}
 * {{Event}}
 * {{EventTarget}}
+* {{File}}
 * {{ReadableByteStreamController}}
 * {{ReadableStream}}
 * {{ReadableStreamBYOBReader}}
