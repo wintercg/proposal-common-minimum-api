@@ -28,14 +28,13 @@ Terminology {#terminology}
 
 The Web Platform is the combination of technology standards defined by organizations such as the W3C, the WHATWG, and others as implemented by Web Browsers.
 
-A Web Platform API is a ... TBD.
-
-A <dfn>Web-interoperable Runtime</dfn> is any EcmaScript-based application runtime environment that implements the subset of Web Platform APIs outlined in this specification. This term is intentionally broad to also encompass Web Browsers.
+A <dfn>Web-interoperable Runtime</dfn> is any EcmaScript-based application runtime environment that implements the subset of Web Platform APIs outlined in this specification. While this term is intentionally broad to also encompass Web Browsers, the primary focus here is on outlining
+expectations for non-browser runtimes.
 
 Common API Index {#index}
 =========================
 
-All <a>Web-interoperable Runtimes</a> conforming to this specification SHALL fully implement each of the following Web Platform APIs in accordance to their normative standard requirements except where modified here. Where any conforming runtime environment chooses (either by necessity or otherwise) to diverge from a normative requirement of the specification, clear explanations of such divergence MUST be made clearly and readily available in documentation.
+All <a>Web-interoperable Runtimes</a> conforming to this specification SHALL implement each of the following Web Platform APIs in accordance to their normative requirements except where modified here. Where any conforming runtime environment chooses (either by necessity or otherwise) to diverge from a normative requirement of the specification, clear explanations of such divergence MUST be made clearly and readily available in documentation.
 
 Interfaces:
 
@@ -88,22 +87,26 @@ The Global Scope {#global-scope}
 
 The exact type of the `globalScope` can vary across runtimes. Most Web Platform APIs are defined in terms that assume Web Browser environments that specifically expose types like {{Window}}, {{Worker}}, {{WorkerGlobalScope}}, and so forth. To simplify conformance, all Interfaces, methods, and properties defined by this specification MUST be exposed on the runtime's relevant global scope (e,g., `globalThis.crypto`, `globalThis.ReadableStream`, etc).
 
-Likewise, with many runtimes, adding a new global-scoped property can introduce breaking changes when the new global conflicts with existing application code. Many Web Platform APIs defined global properties using the `readonly` attribute. To avoid introducing breaking changes, runtimes conforming to this specification MAY choose to ignore the `readonly` attribute for properties being added to the global scope.
+With many runtimes, adding a new global-scoped property can introduce breaking changes when the new global conflicts with existing application code. Many Web Platform APIs define global properties using the `readonly` attribute. To avoid introducing breaking changes, runtimes conforming to this specification MAY choose to ignore the `readonly` attribute for properties being added to the global scope.
+
+Requirements for navigator.userAgent
+====================================
+
+The globalThis.{{navigator}}.{{userAgent}} property is provided such that application code can
+reliably identify the runtime within which it is running. The value of the property is a string
+conforming to the the <code class="idl"><a data-link-type="idl" href="https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3">`User-Agent`</a></code> construction in RFC 7231:
+
+<pre>
+  User-Agent      = product *( RWS ( product / comment ) )
+  product         = token ["/" product-version]
+  product-version = token
+</pre>
+
+While runtimes that implement globalThis.{{navigator}}.{{userAgent}} MUST provide a value that is conformant with the structure defined by RFC 7231, the value SHOULD be treated as a single, complete, opaque, unstructured value. It is RECOMMENDED that the value be limited to a single `product` token excluding the optional `product-version`. For instance, `navigator.userAgent = 'MyRuntime'`. The value SHOULD NOT include any `comment` components.
 
 Extensions {#extensions}
 ========================
 
-Runtime-specific extensions to any Web Platform API MAY be implemented by conforming runtimes. Such extensions must be defined so that their use neither contradicts nor causes the non-conformance of normative functionality of any Web Platform API.
+Runtime-specific extensions to any Web Platform API MAY be implemented by conforming runtimes. Such extensions MUST be defined so that their use neither contradicts nor causes the non-conformance of normative functionality of any Web Platform API.
 
 Application use of such extensions must be carefully considered, as doing so reduces interoperability and portability of code across runtimes.
-
-Open Questions {#open-questions}
-================================
-
-*Remove this section before publishing.*
-
-Issue: Should `window` also be included here as an alias for `globalThis`?
-
-Issue: Should `globalThis` be required to extend from `EventTarget`?
-
-Issue: Many of the globals defined as Web Platform APIs are marked as `readonly` on the global scope. This, however, causes a number of backwards compatibility issues in many runtimes whenever a new global is added (this has been a challenge in Node.js and Cloudflare Workers, for instance). We likely need to allow for standard globals to be implemented without the `readonly` attribute enforced.
