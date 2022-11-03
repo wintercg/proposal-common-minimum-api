@@ -13,7 +13,6 @@ Markup Shorthands: markdown yes
 <pre class=link-defaults>
 spec:url; type:interface; text:URL
 spec:html; type:attribute; for:Window; text:navigator
-spec:html; type:attribute; for:Window; text:self
 </pre>
 
 Introduction {#intro}
@@ -72,7 +71,6 @@ Interfaces:
 Global methods / properties:
 
 * <code class="idl"><a data-link-type="idl" href="https://tc39.es/ecma262/multipage/global-object.html#sec-globalthis">globalThis</a></code>
-* globalThis.{{self}}
 * globalThis.{{atob()}}
 * globalThis.{{btoa()}}
 * globalThis.{{console}}
