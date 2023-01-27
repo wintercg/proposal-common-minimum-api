@@ -196,8 +196,8 @@ specific times.
 ### Promises
 
 A promise itself is *not* an async resource. A promise continuation task,
-however, *is*. In other words, when we use `then()` to attach a continuation
-task to a promise, the current async context is captured and associated with
+however, *is*. In other words, when we use `then()` to schedule a continuation
+task for a promise, the current async context is captured and associated with
 that continuation task.
 
 Note that this is a variance from Node.js' current implementation which treats
@@ -326,16 +326,14 @@ or EventTarget that capture and propagate async context in other ways
 ### Unhandled rejections and the deferred promise pattern
 
 The `unhandledrejection` and `rejectionhandled` events should, by default,
-propagate the context that was current when the promise was rejected and *not*
-when the promise was created.
-
-(Note that these are the only standard `EventTarget` events that are expected
-to propagate async context currently. All other events should be invoked in
-the same frame that the `dispatchEvent()` method was called in.)
+propagate the context that was current when those events are scheduled and
+*not* when the promise was created.
 
 The deferred promise pattern is an approach to using promises that separates
 the `resolve()` and `reject()` functions used to settle the promise from the
 actual promise itself.
+
+Consider the following example carefully:
 
 ```js
 function deferredPromise() {
@@ -346,25 +344,39 @@ function deferredPromise() {
   });
   return { promise, resolve, reject }
 }
-```
 
-Care must be taken when using this pattern to properly propagate the async
-context to the Web API `unhandledrejection` and `rejectionhandled` events.
-
-Specifically, given the following example, the `unhandledrejection` event
-should, by default, get the value `321` from the `AsyncLocalStorage`
-instance, rather than `123`:
-
-```js
 const als = new AsyncLocalStorage();
 
 addEventListener('unhandledrejection', (event) => {
-  console.log(als.getStore()); //321
+  console.log(als.getStore());  // 123
+  als.run('abc', () => {
+    event.promise.catch(() => {});
+  });
 });
 
-const { promise, reject } = als.run(123, () => deferredPromise());
-als.run(321, () => reject('boom'));
+addEventListener('rejectionhandled', () => {
+  console.log(als.getStore()); // 'abc'
+});
+
+const { reject, promise } = als.run(123, () => deferredPromise());
+als.run(321, reject);
 ```
+
+Here, the promise is created *synchronously* within the scope where the
+value of `als.getStore()` is `123`. However, no asynchronous task is
+scheduled at that time so the async context *should not be captured*.
+
+The promise is rejected within the scope where the value of `als.getStore()`
+is `321`. Within the implementation of `reject()`, the internal machinery
+will determine if the rejection is handled. If it is not, that machinery
+will *schedule* the asynchronous dispatch of an `unhandledrejection` event.
+The current async context must be captured *at that point* and restored
+when the 'unhandledrejection` event is actually dispatched.
+
+When the promise rejection handler is attached inside the `unhandledrejection`
+event listener, prompting a subsequent dispatch of the `rejectionhandled`
+event, the value of `als.getStore()` is 'abc', which is propagated to the
+`rejectionhandled` event when it is dispatched.
 
 If someone really wants the `unhandledrejection` event to receive the
 context at the time the promise was created, then the `reject()` should be
@@ -374,7 +386,7 @@ wrapped using `AsyncResource.bind()`, for instance:
 function deferredPromiseCurrentContext() {
   let resolve, reject;
   const promise = new Promise((a,b) => {
-    resolve = AsyncResource.bind(a);
+    resolve = a;
     reject = AsyncResource.bind(b);
   });
   return { promise, resolve, reject }
@@ -383,9 +395,3 @@ function deferredPromiseCurrentContext() {
 
 This would ensure that whenever `reject()` is called, it enters the
 context that was current when the promise was created.
-
-Why is this the case? The `reject()` itself is *not* an asynchronous
-operation but it directly *schedules* the emission of the unhandled
-reject event. It's *that* scheduling of the event that qualifies as
-an asynchronous operation boundary through which the current async
-context should be scheduled.
