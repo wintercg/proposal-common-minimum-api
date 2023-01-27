@@ -178,7 +178,7 @@ class AsyncResource {
 
 ### Importing `AsyncLocalStorage` and `AsyncResource`
 
-The classes should be importable/requirable using, at least the `node:async_hooks`
+The classes should be importable/requirable using, at least, the `node:async_hooks`
 specifier and may be accessed using the bare `async_hooks` specifier. For
 example:
 
