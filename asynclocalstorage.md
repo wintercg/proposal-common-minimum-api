@@ -14,19 +14,19 @@ however. Instead, I'll focus on the logical model assumed by this subset.
 At any given time, there is a current `Async Context Frame` (which, for ease
 of referencing I'll just call `frame` from here on out).
 
-The `frame` is effectively an *immutable* map of `storage keys` to `store`
-value. We refer to this as the `frame`'s `storage context`. A `storage key`
+The `frame` is effectively an *immutable* map of `storage keys` to `value`.
+We refer to this as the `frame`'s `storage context`. A `storage key`
 is associated with exactly one `AsyncLocalStorage` object instance.
 
 There is always a `root frame` whose `storage context` is always empty.
 
 Whenever a new value is associated with a given `storage key`, a new
 `frame` is created with the `value` associated with that `storage key`
-set in the new frame's storage context.
+set in the new `frame`'s `storage context`.
 
 Whenever a new `frame` is created, it inherits a *copy* of the current
 `frame`'s `storage context` before setting the new `value` associated
-with the storage key.
+with the `storage key`.
 
 In **pseudo-code**, this looks something like:  (this is **NOT** the API,
 this is a pesudo-code illustration of the abstract model)
@@ -35,8 +35,8 @@ this is a pesudo-code illustration of the abstract model)
 class AsyncLocalStorage {
   #storageKey = {}; // the storage key is opaque and unique to this
                     // ALS instance.
-  run(store, fn) {
-    return AsyncContextFrame.run(#storageKey, store, fn);
+  run(store, fn, ...args) {
+    return AsyncContextFrame.run(this.#storageKey, store, fn, ...args);
   }
 
   getStore() {
@@ -66,13 +66,13 @@ class AsyncContextFrame {
     this.#storageContext.set(key, store);
   }
 
-  run(fn) {
+  run(fn, ...args) {
     // enter this frame...
     const prior = AsyncContextFrame.exchange(this);
     try {
-      return fn();
+      return fn(...args);
     } finally {
-      AsyncContextFrame:exchange(prior);
+      AsyncContextFrame.exchange(prior);
     }
   }
 
@@ -136,7 +136,7 @@ The following is the limited subset of the `AsyncResource` API:
 class AsyncResource {
   // The type and options here are defined by Node.js, with type
   // *currently* being required by Node.js. In this subset, the
-  // type is still required by is *ignored*. It is required so
+  // type is still required but is *ignored*. It is required so
   // that code written to this subset can be portable to Node.js.
   // The InitOptions current is used to specify async_hooks
   // specific metadata that is not used by this subset. It may
@@ -234,16 +234,10 @@ function within the context of that frame.
 
 ### General guidelines for runtimes and applications
 
-The common theme is that the async context should be captured at the moment
-an asynchronous task is *scheduled*.
-
-  * `promise.then(fn)` *schedules* a continuation task
-  * `setTimeout(fn, n)` *schedules* a timer task
-  * `queueMicrotask(fn)` *schedules* a microtask
-  * and so on
-
-This is the general rule that runtimes and applications should follow for
-any api that schedules asynchronous tasks to run.
+As described previously, async context should be captured at the moment
+an asynchronous task is *scheduled*. This is the general rule that runtimes
+and applications should follow for any api that schedules asynchronous tasks
+to run.
 
 For example, imagine an API that processes a stream of data by calling
 a set of configured callbacks. The context that is propagate to each of
