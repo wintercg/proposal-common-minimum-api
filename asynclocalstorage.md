@@ -4,6 +4,18 @@ This document describes a portable subset of the Node.js `AsyncLocalStorage` API
 that can be implemented by non-Node.js runtimes without dependency on the
 lower-level `async_hooks` API.
 
+The key purpose this exists is because multiple runtimes have the requirement
+of implementing async context tracking and want to do so in a portable,
+interoperable way. There is work currently underway in TC-39 to define a standard
+`AsyncContext` mechanism [as part of the language](https://github.com/legendecas/proposal-async-context)
+but completion of that work is expected to take some time.
+
+The portable subset of `AsyncLocalStorage` defined here is offered as a
+transitional step in advance of `AsyncContext`. This subset is intentionally
+limited to a model and API that aligns closely with `AsyncContext`. Runtimes
+implementing async context tracking are strongly encouraged to implement only
+this subset in order to best remain forwards compatible with `AsyncContext`.
+
 ## Logical model
 
 This subset uses a fundamentally different underlying logical model than what
@@ -181,6 +193,24 @@ const { AsyncLocalStorage, AsyncResource } = require('node:async_hooks');
 Neither the `AsyncLocalStorage` and `AsyncResource` constructors should
 be accessible via the global scope (`globalThis`).
 
+### Differences from Node.js API
+
+The Node.js `AsyncLocalStorage` includes additional APIs that assume
+the async context `frame` is *mutable* in place. For instance, the
+Node.js `asyncLocalStorage.enterWith(...)` API modifies the `value`
+associated with `storage key` *in-place*, without creating and entering
+a new frame. Such a change is not scoped to just the current sync
+execution and can carry a number of side-effects.
+
+The `AsyncLocalStorage` subset defined in this document treats the
+async context frame as *immutable* once created and therefore does
+not implement the `enterWith()` or `disable()` APIs.
+
+The Node.js `AsyncResource` includes options and methods that are
+specific to Node.js' `async_hooks` resource *tracking* mechanisms.
+These aren't relevant to async context tracking and therefore are
+not included in this subset.
+
 ## Capturing the async context
 
 In general terms, an "async resource" is any task that is expected
@@ -211,8 +241,8 @@ end but there's still a lot of uncertainty here***
 
 #### Thenables
 
-Thenables (promise-like objects that expose a `then()` method, should be handled
-in exactly the same way as a promise, by default.
+Thenables (promise-like objects that expose a `then()` method) should be handled
+in exactly the same way as a promise.
 
 Thenables do, however, have the option of being defined as extending
 `AsyncResource`, overriding the default behavior.
