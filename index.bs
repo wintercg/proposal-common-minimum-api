@@ -64,7 +64,6 @@ Interfaces:
 * {{TransformStream}}
 * {{TransformStreamDefaultController}}
 * {{URL}}
-* <code class="idl"><a data-link-type="idl" href="https://wicg.github.io/urlpattern/#urlpattern-class">URLPattern</a></code>
 * {{URLSearchParams}}
 * {{WritableStream}}
 * {{WritableStreamDefaultController}}
