@@ -77,6 +77,8 @@ Global methods / properties:
 * globalThis.{{console}}
 * globalThis.{{crypto}}
 * globalThis.{{navigator}}.{{userAgent}}
+* globalThis.{{performance}}.{{Performance/now()}}
+* globalThis.{{performance}}.{{timeOrigin}}
 * globalThis.{{queueMicrotask()}}
 * globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
 * globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
