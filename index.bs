@@ -50,12 +50,34 @@ Interfaces:
 * {{Event}}
 * {{EventTarget}}
 * {{File}}
+* {{FormData}}
+
+    Issue: The {{FormData}} constructor optionally takes {{HTMLFormElement}} and {{HTMLElement}} as parameters.
+    TODO: Figure out what implementations without DOM support should do here.
+    Node.js and Deno throw if the first parameter is not `undefined` but ignore the second parameter.
+    Cloudflare Workers ignores all parameters.
+
+* {{Headers}}
+
+    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
+    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
+
 * {{ReadableByteStreamController}}
 * {{ReadableStream}}
 * {{ReadableStreamBYOBReader}}
 * {{ReadableStreamBYOBRequest}}
 * {{ReadableStreamDefaultController}}
 * {{ReadableStreamDefaultReader}}
+* {{Request}}
+
+    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
+    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
+
+* {{Response}}
+
+    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
+    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
+
 * {{SubtleCrypto}}
 * {{TextDecoder}}
 * {{TextDecoderStream}}
@@ -75,6 +97,11 @@ Global methods / properties:
 * globalThis.{{btoa()}}
 * globalThis.{{console}}
 * globalThis.{{crypto}}
+* globalThis.{{fetch()}}
+
+    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
+    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
+
 * globalThis.{{navigator}}.{{userAgent}}
 * globalThis.{{performance}}.{{Performance/now()}}
 * globalThis.{{performance}}.{{timeOrigin}}
