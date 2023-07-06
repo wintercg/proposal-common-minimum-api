@@ -58,10 +58,6 @@ Interfaces:
     Cloudflare Workers ignores all parameters.
 
 * {{Headers}}
-
-    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
-    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
-
 * {{ReadableByteStreamController}}
 * {{ReadableStream}}
 * {{ReadableStreamBYOBReader}}
@@ -69,15 +65,7 @@ Interfaces:
 * {{ReadableStreamDefaultController}}
 * {{ReadableStreamDefaultReader}}
 * {{Request}}
-
-    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
-    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
-
 * {{Response}}
-
-    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
-    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
-
 * {{SubtleCrypto}}
 * {{TextDecoder}}
 * {{TextDecoderStream}}
@@ -98,10 +86,6 @@ Global methods / properties:
 * globalThis.{{console}}
 * globalThis.{{crypto}}
 * globalThis.{{fetch()}}
-
-    Note: The WinterCG is working on a fork of the Fetch spec to better fulfill the needs of web-interoperable runtimes.
-    See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
-
 * globalThis.{{navigator}}.{{userAgent}}
 * globalThis.{{performance}}.{{Performance/now()}}
 * globalThis.{{performance}}.{{timeOrigin}}
@@ -109,6 +93,8 @@ Global methods / properties:
 * globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
 * globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
 * globalThis.{{structuredClone()}}
+
+Note: This list includes APIs defined in [[FETCH]]. The WinterCG is currently working on a fork of this spec to better fulfill the needs of web-interoperable runtimes, and such runtimes should follow this fork instead. See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
 
 The Global Scope {#global-scope}
 ================================
