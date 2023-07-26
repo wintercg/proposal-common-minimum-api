@@ -50,12 +50,22 @@ Interfaces:
 * {{Event}}
 * {{EventTarget}}
 * {{File}}
+* {{FormData}}
+
+    Issue: The {{FormData}} constructor optionally takes {{HTMLFormElement}} and {{HTMLElement}} as parameters.
+    TODO: Figure out what implementations without DOM support should do here.
+    Node.js and Deno throw if the first parameter is not `undefined` but ignore the second parameter.
+    Cloudflare Workers ignores all parameters.
+
+* {{Headers}}
 * {{ReadableByteStreamController}}
 * {{ReadableStream}}
 * {{ReadableStreamBYOBReader}}
 * {{ReadableStreamBYOBRequest}}
 * {{ReadableStreamDefaultController}}
 * {{ReadableStreamDefaultReader}}
+* {{Request}}
+* {{Response}}
 * {{SubtleCrypto}}
 * {{TextDecoder}}
 * {{TextDecoderStream}}
@@ -75,6 +85,7 @@ Global methods / properties:
 * globalThis.{{btoa()}}
 * globalThis.{{console}}
 * globalThis.{{crypto}}
+* globalThis.{{fetch()}}
 * globalThis.{{navigator}}.{{userAgent}}
 * globalThis.{{performance}}.{{Performance/now()}}
 * globalThis.{{performance}}.{{timeOrigin}}
@@ -82,6 +93,8 @@ Global methods / properties:
 * globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
 * globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
 * globalThis.{{structuredClone()}}
+
+Note: This list includes APIs defined in [[FETCH]]. The WinterCG is currently working on a fork of this spec to better fulfill the needs of web-interoperable runtimes, and such runtimes should follow this fork instead. See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
 
 The Global Scope {#global-scope}
 ================================
