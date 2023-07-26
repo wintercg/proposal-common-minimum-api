@@ -75,6 +75,11 @@ Interfaces:
 * {{TransformStreamDefaultController}}
 * {{URL}}
 * {{URLSearchParams}}
+* {{WebAssembly}}.<l spec="wasm-js-api">{{Global}}</l>
+* {{WebAssembly}}.<l spec="wasm-js-api">{{Instance}}</l>
+* {{WebAssembly}}.<l spec="wasm-js-api">{{Memory}}</l>
+* {{WebAssembly}}.<l spec="wasm-js-api">{{Module}}</l>
+* {{WebAssembly}}.<l spec="wasm-js-api">{{Table}}</l>
 * {{WritableStream}}
 * {{WritableStreamDefaultController}}
 
@@ -93,6 +98,11 @@ Global methods / properties:
 * globalThis.{{setTimeout()}} / globalThis.{{clearTimeout()}}
 * globalThis.{{setInterval()}} / globalThis.{{clearInterval()}}
 * globalThis.{{structuredClone()}}
+* globalThis.{{WebAssembly}}.{{WebAssembly/compile()}}
+* globalThis.{{WebAssembly}}.{{WebAssembly/compileStreaming()}}
+* globalThis.{{WebAssembly}}.{{WebAssembly/instantiate()}}
+* globalThis.{{WebAssembly}}.{{WebAssembly/instantiateStreaming()}}
+* globalThis.{{WebAssembly}}.{{WebAssembly/validate()}}
 
 Note: This list includes APIs defined in [[FETCH]]. The WinterCG is currently working on a fork of this spec to better fulfill the needs of web-interoperable runtimes, and such runtimes should follow this fork instead. See <a href="https://fetch.spec.wintercg.org">https://fetch.spec.wintercg.org</a>.
 
