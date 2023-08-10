@@ -90,7 +90,7 @@ Global methods / properties:
 * globalThis.{{btoa()}}
 * globalThis.{{console}}
 * globalThis.{{crypto}}
-* globalThis.{{fetch()}}
+* globalThis.{{backgroundFetch.fetch()}}
 * globalThis.{{navigator}}.{{userAgent}}
 * globalThis.{{performance}}.{{Performance/now()}}
 * globalThis.{{performance}}.{{timeOrigin}}
