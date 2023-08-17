@@ -16,7 +16,7 @@ jobs:
       - name: Build spec
         run: |
           mkdir -p out
-          curl --retry 2 https://api.csswg.org/bikeshed/ --output out/index.html --header "Accept: text/plain, text/html" -F die-on=fatal -F file=@"index.bs"
+          curl --retry 2 --fail https://api.csswg.org/bikeshed/ --output out/index.html --header "Accept: text/plain, text/html" -F die-on=fatal -F file=@"index.bs"
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
