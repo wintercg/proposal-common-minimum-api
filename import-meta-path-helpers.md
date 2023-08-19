@@ -10,7 +10,7 @@ A common user request from developers writing ESM code is easy access to file pa
 
 Since `__filename` and `__dirname` have been around [since Node.js 0.1.27](https://nodejs.org/api/modules.html#__dirname), released in 2010, they are very well known to Node.js developers and very broadly referenced by `npm` packages. It is common to find documentation suggesting passing `__dirname` into a function for serving the static assets of a folder, for example, or passing `__filename` into a function used for logging.
 
-In Node.js, developers working with such path-based APIs need to jump through a few hoops. Node.js provides a helper `fileURLToPath` that developers can import from `node:url`, to enable code like `serveStaticAssets(fileURLToPath(dirname(import.meta.url)))`. A common complaint of Node.js developers is that this is too verbose, and a way to achieve the same with simpler code and without needing to import utility helpers would be preferable.
+In Node.js, developers working with such path-based APIs need to jump through a few hoops. Node.js provides a helper `fileURLToPath` that developers can import from `node:url`, to enable code like `serveStaticAssets(dirname(fileURLToPath(import.meta.url)))`. A common complaint of Node.js developers is that this is too verbose, and a way to achieve the same with simpler code and without needing to import utility helpers would be preferable.
 
 ## Proposal
 
