@@ -14,7 +14,7 @@ The portable subset of `AsyncLocalStorage` defined here is offered as a
 transitional step in advance of `AsyncContext`. This subset is intentionally
 limited to a model and API that aligns closely with `AsyncContext`. Runtimes
 implementing async context tracking are strongly encouraged to implement only
-this subset in order to best remain forwards compatible with `AsyncContext`.
+this subset to best remain forwards compatible with `AsyncContext`.
 
 ## Logical model
 
@@ -40,8 +40,10 @@ Whenever a new `frame` is created, it inherits a *copy* of the current
 `frame`'s `storage context` before setting the new `value` associated
 with the `storage key`.
 
-In **pseudo-code**, this looks something like:  (this is **NOT** the API,
-this is a pesudo-code illustration of the abstract model)
+In **pseudo-code**, this looks something like:
+
+**Note**: this is **NOT** the API,
+this is a pseudo-code illustration of the abstract model.
 
 ```js
 class AsyncLocalStorage {
@@ -97,7 +99,7 @@ class AsyncContextFrame {
 Any async resource that is created needs only to grab the current `frame`
 and run code within its scope to access the correct `storage context`.
 
-Note that key to this model is that the `storage context` is *immutable*
+Note that the key to this model is that the `storage context` is *immutable*
 once created. Mutations to the context using `asyncLocalStorage.run()`
 use copy-on-write semantics, causing a new `frame` to be created and
 entered. This is a key performance optimization over the current model
@@ -112,7 +114,7 @@ an asynchronous task is *scheduled*.
   * and so on
 
 This is the general rule that runtimes and applications should follow for
-any api that schedules asynchronous tasks to run.
+any API that schedules asynchronous tasks to run.
 
 ## The API
 
@@ -134,7 +136,7 @@ class AsyncLocalStorage {
   // In this subset, exit() is equivalent to calling `run(undefined, fn)`
   exit(fn, ...args) : any;
 
-  // Returns the value of store associated with this ALS instance
+  // Returns the value of the store associated with this ALS instance
   // in the current frame's storage context.
   getStore() : any;
 }
@@ -146,7 +148,7 @@ The following is the limited subset of the `AsyncResource` API:
 
 ```js
 class AsyncResource {
-  // The type and options here are defined by Node.js, with type
+  // The type and options here are defined by Node.js, with the type
   // *currently* being required by Node.js. In this subset, the
   // type is still required but is *ignored*. It is required so
   // that code written to this subset can be portable to Node.js.
@@ -200,7 +202,7 @@ the async context `frame` is *mutable* in place. For instance, the
 Node.js `asyncLocalStorage.enterWith(...)` API modifies the `value`
 associated with `storage key` *in-place*, without creating and entering
 a new frame. Such a change is not scoped to just the current sync
-execution and can carry a number of side-effects.
+execution and can carry several side effects.
 
 The `AsyncLocalStorage` subset defined in this document treats the
 async context frame as *immutable* once created and therefore does
@@ -215,12 +217,12 @@ not included in this subset.
 
 In general terms, an "async resource" is any task that is expected
 to capture the current async context frame and run within its scope
-at some point in the future. There are some async resources built in
-to JavaScript (e.g. promises, thenables, and microtasks), some defined
+at some point in the future. There are some async resources built into
+JavaScript (e.g. promises, thenables, and microtasks), some defined
 by Web Platform APIs (e.g. timers, background tasks, unhandled rejections),
-some defined by the runtime, and others defined by the application. The
-common characterist of all async resources is that they are expected to
-capture the current async context frame and propagate it at various
+some defined by the runtime, and others defined by the application.
+A common characteristic of all async resources is that they are expected
+to capture the current async context frame and propagate it at various
 specific times.
 
 ### Promises
@@ -237,7 +239,6 @@ the promise is created rather than when the continuation task is created.
 ***This is an area that will likely continue to evolve and is currently being
 actively discussed. We *could* end up with a model similar to Node.js' in the
 end but there's still a lot of uncertainty here***
-
 
 #### Thenables
 
@@ -266,13 +267,13 @@ function within the context of that frame.
 
 As described previously, async context should be captured at the moment
 an asynchronous task is *scheduled*. This is the general rule that runtimes
-and applications should follow for any api that schedules asynchronous tasks
+and applications should follow for any API that schedules asynchronous tasks
 to run.
 
 For example, imagine an API that processes a stream of data by calling
-a set of configured callbacks. The context that is propagate to each of
+a set of configured callbacks. The context that is propagated to each of
 the callbacks should be the context that is current when the processing
-it *started*.
+*started*.
 
 ```js
 const als = new AsyncLocalStorage();
@@ -293,7 +294,7 @@ Here, the call to `processor.start(data)` actually schedules the async
 activity, so that is the context that is propagated by default. If,
 alternatively, the intent is for the callbacks to run within the
 context that is current when the `Processor` instance is created,
-`AsyncResource.bind()` should be used, of the `Processor` can extend
+`AsyncResource.bind()` should be used, if the `Processor` can extend
 `AsyncResource` and use `this.runInAsyncScope()`.
 
 ```js
@@ -313,7 +314,7 @@ als.run(123, () => processor.start(data));
 
 `EventTarget` and `EventEmitter` are slightly different cases. Events
 are *technically not* asynchronous tasks. Both EventTarget and
-EventEmitter dispatch events fully sychronously so they will always
+EventEmitter dispatch events fully synchronously so they will always
 run in the same context frame as the dispatchEvent/emit call.
 
 ```js
@@ -331,7 +332,7 @@ als.run(321, () => {
 });
 ```
 
-For force an event listener to use the context frame that is current
+To force an event listener to use the current context frame
 when the listener is added, use `AsyncResource.bind()`:
 
 ```js
@@ -401,14 +402,14 @@ is `321`. Within the implementation of `reject()`, the internal machinery
 will determine if the rejection is handled. If it is not, that machinery
 will *schedule* the asynchronous dispatch of an `unhandledrejection` event.
 The current async context must be captured *at that point* and restored
-when the 'unhandledrejection` event is actually dispatched.
+when the `unhandledrejection` event is dispatched.
 
 When the promise rejection handler is attached inside the `unhandledrejection`
 event listener, prompting a subsequent dispatch of the `rejectionhandled`
 event, the value of `als.getStore()` is 'abc', which is propagated to the
 `rejectionhandled` event when it is dispatched.
 
-If someone really wants the `unhandledrejection` event to receive the
+If someone wants the `unhandledrejection` event to receive the
 context at the time the promise was created, then the `reject()` should be
 wrapped using `AsyncResource.bind()`, for instance:
 

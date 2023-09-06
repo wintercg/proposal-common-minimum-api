@@ -33,7 +33,7 @@ While this term is intentionally broad to also encompass Web Browsers, the prima
 Common API Index {#index}
 =========================
 
-All <a>Web-interoperable Runtimes</a> conforming to this specification SHALL implement each of the following Web Platform APIs in accordance to their normative requirements except where modified here. Where any conforming runtime environment chooses (either by necessity or otherwise) to diverge from a normative requirement of the specification, clear explanations of such divergence MUST be made clearly and readily available in documentation.
+All <a>Web-interoperable Runtimes</a> conforming to this specification SHALL implement each of the following Web Platform APIs in accordance with their normative requirements except where modified here. Where any conforming runtime environment chooses (either by necessity or otherwise) to diverge from a normative requirement of the specification, clear explanations of such divergence MUST be made clearly and readily available in the documentation.
 
 Interfaces:
 
@@ -117,7 +117,7 @@ Requirements for navigator.userAgent
 ====================================
 
 The globalThis.{{navigator}}.{{userAgent}} property is provided such that application code can reliably identify the runtime within which it is running.
-The value of the property is a string conforming to the the <code class="idl"><a data-link-type="idl" href="https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3">`User-Agent`</a></code> construction in RFC 7231:
+The value of the property is a string conforming to the <code class="idl"><a data-link-type="idl" href="https://datatracker.ietf.org/doc/html/rfc7231#section-5.5.3">`User-Agent`</a></code> construction in RFC 7231:
 
 <pre>
   User-Agent      = product *( RWS ( product / comment ) )
