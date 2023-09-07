@@ -20,7 +20,7 @@ For runtimes that support filesystem-based modules, we propose adding two new op
 
 A string containing the full absolute filesystem path to the current module, like CommonJS `__filename`. This is the same as `fileURLToPath(import.meta.url)` in Node.js. An example value would be `/Users/Geoffrey/my-project/src/index.js`.
 
-The value will be undefined for modules that are not loaded from the filesystem, such as modules whose `import.meta.url` begins with `http` or `data`.
+The property will be absent for modules that are not loaded from the filesystem, such as modules whose `import.meta.url` begins with `http` or `data`.
 
 ### `import.meta.dirname`
 
