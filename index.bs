@@ -7,7 +7,7 @@ Level: none
 URL: https://common-min-api.proposal.wintercg.org/
 Repository: https://github.com/wintercg/proposal-common-minimum-api
 Editor: James M Snell, Cloudflare https://cloudflare.com/, jsnell@cloudflare.com
-Abstract: Minimum Common Web Platform API for Non-Browser EcmaScript-based runtimes.
+Abstract: Minimum Common Web Platform API for Non-Browser ECMAScript-based runtimes.
 Markup Shorthands: markdown yes
 </pre>
 <pre class=link-defaults>
@@ -27,7 +27,7 @@ Terminology {#terminology}
 
 The Web Platform is the combination of technology standards defined by organizations such as the W3C, the WHATWG, and others as implemented by Web Browsers.
 
-A <dfn>Web-interoperable Runtime</dfn> is any EcmaScript-based application runtime environment that implements the subset of Web Platform APIs outlined in this specification.
+A <dfn>Web-interoperable Runtime</dfn> is any ECMAScript-based application runtime environment that implements the subset of Web Platform APIs outlined in this specification.
 While this term is intentionally broad to also encompass Web Browsers, the primary focus here is on outlining expectations for non-browser runtimes.
 
 Common API Index {#index}
