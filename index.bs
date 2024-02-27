@@ -13,6 +13,16 @@ Markup Shorthands: markdown yes
 <pre class=link-defaults>
 spec:url; type:interface; text:URL
 spec:html; type:attribute; for:Window; text:navigator
+spec:ecmascript; type:dfn; text:record
+</pre>
+<pre class="anchors">
+urlPrefix: https://tc39.es/proposal-import-attributes/; spec: JSIMPORTATTRIBUTES
+    type: abstract-op
+        text: HostGetSupportedImportAttributes; url: sec-hostgetsupportedimportattributes
+urlPrefix: https://html.spec.whatwg.org/multipage/; spec: html
+    type: dfn
+        text: fetch a single module script; url: fetch-a-single-module-script
+        text: fetch a single imported module script; url: fetch-a-single-imported-module-script
 </pre>
 
 Introduction {#intro}
@@ -112,6 +122,37 @@ The Global Scope {#global-scope}
 The exact type of the global scope (`globalThis`) can vary across runtimes. Most Web Platform APIs are defined in terms that assume Web Browser environments that specifically expose types like {{Window}}, {{Worker}}, {{WorkerGlobalScope}}, and so forth. To simplify conformance, all Interfaces, methods, and properties defined by this specification MUST be exposed on the runtime's relevant global scope (e,g., `globalThis.crypto`, `globalThis.ReadableStream`, etc).
 
 With many runtimes, adding a new global-scoped property can introduce breaking changes when the new global conflicts with existing application code. Many Web Platform APIs define global properties using the `readonly` attribute. To avoid introducing breaking changes, runtimes conforming to this specification MAY choose to ignore the `readonly` attribute for properties being added to the global scope.
+
+Requirements for EcmaScript modules {#esm-requirements}
+=======================================================
+
+[=Web-interoperable runtimes=] which support EcmaScript modules must implement the following ECMA-262 host hooks as follows:
+
+: [$HostLoadImportedModule$]
+:: This host hook must be implemented [[HTML#hostloadimportedmodule|as defined in the HTML spec]], except that they may pass a [=perform the fetch hook=] algorithm to [=fetch a single imported module script=] even when <var ignore="">loadState</var> is undefined. (See also [[#custom-module-loading]].)
+: [$HostGetSupportedImportAttributes$]
+:: This host hook must be implemented [[HTML#hostgetsupportedimportattributes|as defined in the HTML spec]].
+: [$HostGetImportMetaProperties$]
+:: If a runtime can never have an [=entrypoint module=] for any [=agent clusters=] (e.g. web browsers), then it may implement this host hook [[HTML#hostgetimportmetaproperties|as defined in the HTML spec]]. Otherwise, it must implement it as follows:
+     1. Let <var>moduleScript</var> be <var ignore="">moduleRecord</var>.\[[HostDefined]].
+     1. Let <var>urlString</var> and <var>resolveFunction</var> be [[HTML#hostgetimportmetaproperties|as defined in the HTML spec]].
+     1. Let <var>is main</var> be true if <var>moduleScript</var> is the [=surrounding agent=]'s [=agent cluster=]'s [=entrypoint module=]; false otherwise.
+     1. Return « [=Record=] { \[[Key]]: "<code>url</code>", \[[Value]]: <var>urlString</var> }, [=Record=] { \[[Key]]: "<code>resolve</code>", \[[Value]]: <var>resolveFunction</var> }, [=Record=] { \[[Key]]: "<code>main</code>", \[[Value]]: <var>is main</var> } ».
+
+A [=JavaScript module script=] is an [=agent cluster=]'s <dfn>entrypoint module</dfn> if both of the following conditions hold:
+  * The call to [=fetch a single module script=] that created it had <var ignore="">[=isTopLevel=]</var> set to true.
+  * That call happened before any other call to [=fetch a single module script=] or before any other JavaScript code was run in the [=agent cluster=].
+
+For the purposes of this definition, runtime initialization code is ignored, even if it is written in JavaScript or uses [=module scripts=].
+
+Issue: This definition does not actually exclude browsers, since the first user code run in an agent cluster might be a <code>&lt;script type="module"&gt;</code>.
+
+Customizing module loading {#custom-module-loading}
+---------------------------------------------------
+
+[=Web-interoperable runtimes=] might want to customize the module loading process for EcmaScript modules, e.g. for allowing certain custom HTTP schemes such as <code>node:</code> or <code>npm:</code>, disallowing HTTP(S) imports, or transpiling non-JavaScript code.
+
+They must do this by modifying [=fetch an external module script graph=], [=fetch a module worker script graph=] and [[HTML#hostloadimportedmodule|HostLoadImportedModule]] to pass a custom [=perform the fetch hook=] algorithm (only if <var ignore="">loadState</var> is undefined, in the case of HostLoadImportedModule).
 
 Requirements for navigator.userAgent
 ====================================
